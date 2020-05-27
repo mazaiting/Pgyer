@@ -15,10 +15,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         LOG_DEBUG = true
+//        // api key
+//        val apiKey = "c65f609fd16e7d4834a1f7e46e105ca2"
+//        // app key
+//        val appKey = "a370d65d7e2eb84cb659ad1ed079799b"
         // api key
-        val apiKey = "c65f609fd16e7d4834a1f7e46e105ca2"
+        val apiKey = ""
         // app key
-        val appKey = "a370d65d7e2eb84cb659ad1ed079799b"
+        val appKey = ""
 
         UpdateManager.getInstance()
             .check(this, apiKey, appKey, BuildConfig.VERSION_NAME) {

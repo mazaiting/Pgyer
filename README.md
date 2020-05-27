@@ -10,7 +10,7 @@
 
 ```
 // 自定义插件
-classpath 'com.mazaiting.pgyer:update:<版本号>'
+implementation 'com.mazaiting.pgyer:update:<版本号>'
 ```
 
 2. 在启动 Activity 中添加更新检测

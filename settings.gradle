@@ -1,0 +1,3 @@
+rootProject.name='Pgyer'
+include ':app'
+include ':update'

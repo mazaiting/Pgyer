@@ -98,10 +98,8 @@ class UpdateManager private constructor() {
                 val data = it.data
                 // 构建版本
                 val newBuildBuildVersion = data.buildBuildVersion
-                // 下载地址
-                val newUrl = data.buildShortcutUrl.split('?')[0]
                 // 为 0 时直接保存
-                if (newBuildBuildVersion > buildBuildVersion) {
+                if (newBuildBuildVersion > 1 && newBuildBuildVersion > buildBuildVersion) {
                     block?.let { block(data) }
                 }
             } else {
@@ -119,9 +117,10 @@ class UpdateManager private constructor() {
      */
     private fun getBuildVersion(context: Context): Int {
         try {
-            val ofi = context.openFileInput("pgyer.json")
+            // 获取文件流
+            val inputStream = context.assets.open("pgyer.json")
             // 读取内容
-            val pgyerContent = String(ofi.readBytes())
+            val pgyerContent = String(inputStream.readBytes())
             // 解析
             val jsonObject = JSONObject(pgyerContent)
             // 获取版本

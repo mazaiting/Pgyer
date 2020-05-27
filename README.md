@@ -2,6 +2,7 @@
 
 #### 介绍
  蒲公英相关操作
+ - 更新操作依赖于[Gradle Plugin](https://github.com/mazaiting/GradlePlugin)
 
 #### 使用说明
 
@@ -35,13 +36,11 @@ UpdateManager.getInstance()
 
 ### 版本
 
-- v1.0.3
+- v1.0.2
 1. 修复首次安装提示更新问题
 2. 增加混淆配置
-
-- v1.0.2
-1. 新增更新block, 将更新处理让使用者自己处理
-2. 增加安装包广播
+3. 新增更新block, 将更新处理让使用者自己处理
+4. 通过 assets/pgyer.json 中的文件内容判断是否更新
 
 - v1.0.1
 1. 新增动态设置 API_KEY 和 APP_KEY

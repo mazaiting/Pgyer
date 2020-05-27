@@ -15,7 +15,7 @@ publish {
     userOrg = 'mazaiting'      //bintray注册的用户名
     groupId = 'com.mazaiting.pgyer'     //compile引用时的第1部分groupId
     artifactId = 'update'     //compile引用时的第2部分项目名
-    publishVersion = '1.0.3'    //compile引用时的第3部分版本号
+    publishVersion = '1.0.2'    //compile引用时的第3部分版本号
     desc = 'This is an Android Pgyer Update Tool library.'//项目描述
     website = 'https://github.com/mazaiting/Pgyer' //github 托管地址
 }

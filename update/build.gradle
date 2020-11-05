@@ -31,9 +31,33 @@ dependencies {
 //    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 //    implementation 'androidx.appcompat:appcompat:1.1.0'
 //    implementation 'androidx.core:core-ktx:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
 
 apply from: "./../jcenter.gradle"
+
+apply plugin: 'maven-publish'
+// 执行 ./gradlew mixing:publishAllPublicationsToMavenRepository
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                // change URLs to point to your repos, e.g. http://my.org/repo
+                url = "../repo/"
+            }
+        }
+        publications {
+            // Creates a Maven publication called “debug”.
+            MyPublication(MavenPublication) {
+                from components.release
+                groupId 'com.mazaiting.pgyer'
+                artifactId 'update'
+                version '1.0.3'
+            }
+        }
+    }
+}

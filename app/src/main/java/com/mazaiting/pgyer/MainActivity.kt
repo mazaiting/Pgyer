@@ -3,10 +3,7 @@ package com.mazaiting.pgyer
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.mazaiting.common.LOG_DEBUG
-import com.mazaiting.common.browse
-import com.mazaiting.common.debug
-import com.mazaiting.common.toast
+import com.mazaiting.common.*
 import com.mazaiting.pgyer.update.UpdateManager
 
 class MainActivity : AppCompatActivity() {

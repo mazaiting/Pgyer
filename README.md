@@ -9,7 +9,6 @@
 1. 在项目模块目录下的 build.gradle 添加依赖
 
 ```
-// 自定义插件
 implementation 'com.mazaiting.pgyer:update:<版本号>'
 ```
 

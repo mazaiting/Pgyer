@@ -10,6 +10,8 @@ import com.mazaiting.pgyer.bean.CheckBean
 import com.mazaiting.pgyer.util.RxUtil
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 
 /***
@@ -45,6 +47,11 @@ class UpdateManager private constructor() {
     companion object {
 
         /**
+         * 文件名
+         */
+        private const val FILE_NAME = "pgyer.json"
+
+        /**
          * 更新管理者
          */
         private var instance: UpdateManager? = null
@@ -58,7 +65,7 @@ class UpdateManager private constructor() {
                 synchronized(this) {
                     if (null == instance) {
                         instance = UpdateManager()
-                        LOG_DEBUG = true
+//                        LOG_DEBUG = true
                     }
                 }
             return instance!!
@@ -87,27 +94,88 @@ class UpdateManager private constructor() {
             context.toast("蒲公英 API KEY 为空! 请设置")
             return
         }
-        // 获取蒲公英版本
-        val buildBuildVersion = getBuildVersion(context)
-        // 获取是否更新
-        response({ RxUtil.checkAsync(apiKey, appKey, buildVersion, buildBuildVersion) }, {
-            debug(it.message)
-            // 判断是否成功
-            if (it.isSuccess()) {
-                debug(it.data)
-                val data = it.data
-                // 构建版本
-                val newBuildBuildVersion = data.buildBuildVersion
-                // 为 0 时直接保存
-                if (newBuildBuildVersion > 1 && newBuildBuildVersion > buildBuildVersion) {
-                    block?.let { block(data) }
+        // 拷贝文件
+        val isCopyAssetsToFile = copyAssetsToFile(context)
+        // 判断是否复制成功
+        if (isCopyAssetsToFile) {
+            // 获取蒲公英版本
+            val buildBuildVersion = getBuildVersion(context)
+            // 获取是否更新
+            response({ RxUtil.checkAsync(apiKey, appKey, buildVersion, buildBuildVersion) }, {
+                debug(it.message)
+                // 判断是否成功
+                if (it.isSuccess()) {
+                    debug(it.data)
+                    val data = it.data
+                    // 构建版本
+                    val newBuildBuildVersion = data.buildBuildVersion
+                    // 为 0 时直接保存
+                    if (newBuildBuildVersion > 1 && newBuildBuildVersion > buildBuildVersion) {
+                        block?.let { block(data) }
+                    } else {
+                        writeBuildVersion(context, data.buildBuildVersion)
+                    }
+                } else {
+                    context.toast(it.getFailedMessage())
                 }
-            } else {
-                context.toast(it.getFailedMessage())
-            }
-        }, {
-            debug(it)
-        })
+            }, {
+                debug(it)
+            })
+        } else {
+            context.toast("复制文件失败")
+        }
+    }
+
+    /**
+     * 拷贝 Assets 中的 pgyer.json 到 file文件夹
+     * @return true: 成功; false: 失败
+     */
+    private fun copyAssetsToFile(context: Context): Boolean {
+        // 创建文件
+        val file = File(context.filesDir.absolutePath, FILE_NAME)
+        // 如果文件存在, 则直接返回
+        if (file.exists()) {
+            return true
+        }
+        // 获取文件流
+        val inputStream = context.assets.open(FILE_NAME)
+        // 输出流
+        val fos = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE)
+        return try {
+            fos.write(inputStream.readBytes())
+            fos.close()
+            inputStream.close()
+            true
+        } catch (e: IOException) {
+            debug("解析异常")
+            fos.close()
+            inputStream.close()
+            false
+        }
+    }
+
+    /**
+     * 写入蒲公英配置内容
+     * @param context 上下文
+     * @param buildBuildVersion 当前版本
+     */
+    private fun writeBuildVersion(context: Context, buildBuildVersion: Int) {
+        try {
+            // 获取文件流
+            val inputStream = context.openFileInput(FILE_NAME)
+            // 读取内容
+            val pgyerContent = String(inputStream.readBytes())
+            inputStream.close()
+            // 解析
+            val jsonObject = JSONObject(pgyerContent)
+            jsonObject.put("build_version", buildBuildVersion)
+            // 输出流
+            val fos = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE)
+            fos.write(jsonObject.toString().toByteArray())
+            fos.close()
+        } catch (e: IOException) {
+            debug("解析异常")
+        }
     }
 
 
@@ -118,7 +186,7 @@ class UpdateManager private constructor() {
     private fun getBuildVersion(context: Context): Int {
         try {
             // 获取文件流
-            val inputStream = context.assets.open("pgyer.json")
+            val inputStream = context.openFileInput(FILE_NAME)
             // 读取内容
             val pgyerContent = String(inputStream.readBytes())
             // 解析

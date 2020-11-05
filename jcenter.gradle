@@ -1,23 +1,49 @@
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
-repositories {
-    mavenCentral()
-}
+//repositories {
+//    mavenCentral()
+//}
 
-android {
-    lintOptions {
-        abortOnError false
-    }
-}
+//android {
+//    lintOptions {
+//        abortOnError false
+//    }
+//}
 
-publish {
-    repoName="Pgyer"//仓库名(repoName 如果没有填写，上传的库默认仓库是maven)
-    userOrg = 'mazaiting'      //bintray注册的用户名
-    groupId = 'com.mazaiting.pgyer'     //compile引用时的第1部分groupId
-    artifactId = 'update'     //compile引用时的第2部分项目名
-    publishVersion = '1.0.2'    //compile引用时的第3部分版本号
-    desc = 'This is an Android Pgyer Update Tool library.'//项目描述
-    website = 'https://github.com/mazaiting/Pgyer' //github 托管地址
-}
+//publish {
+//    repoName="Pgyer"//仓库名(repoName 如果没有填写，上传的库默认仓库是maven)
+//    userOrg = 'mazaiting'      //bintray注册的用户名
+//    groupId = 'com.mazaiting.pgyer'     //compile引用时的第1部分groupId
+//    artifactId = 'update'     //compile引用时的第2部分项目名
+//    publishVersion = '1.0.2'    //compile引用时的第3部分版本号
+//    desc = 'This is an Android Pgyer Update Tool library.'//项目描述
+//    website = 'https://github.com/mazaiting/Pgyer' //github 托管地址
+//}
 
 // ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
+
+apply plugin: 'com.jfrog.bintray'
+
+bintray {
+    user = 'mazaiting'
+    key = '94e94170f945ee376a07f0b5197b9060bbbdcfb4'
+    publications = ['MyPublication']
+    publish = true
+    pkg {
+        repo = 'Pgyer'
+        name = 'update'
+        userOrg = 'mazaiting'
+        desc = 'This is an Android Pgyer Update Tool library.'
+        websiteUrl = 'https://github.com/mazaiting/Pgyer'
+        issueTrackerUrl = 'https://github.com/mazaiting/Pgyer/issues'
+        vcsUrl = 'https://github.com/mazaiting/Pgyer.git'
+        licenses = ['Apache-2.0']
+
+        version {
+            name = '1.0.4' //Bintray logical version name
+            desc = ''
+            released  = new Date()
+            vcsTag = '1.0.4'
+        }
+    }
+}

@@ -112,7 +112,7 @@ class UpdateManager private constructor() {
                     // 为 0 时直接保存
                     if (newBuildBuildVersion > 1 && newBuildBuildVersion > buildBuildVersion) {
                         block?.let { block(data) }
-                    } else {
+                    } else if (buildBuildVersion > newBuildBuildVersion) {
                         writeBuildVersion(context, data.buildBuildVersion)
                     }
                 } else {

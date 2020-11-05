@@ -25,8 +25,8 @@
 apply plugin: 'com.jfrog.bintray'
 
 bintray {
-    user = 'mazaiting'
-    key = '94e94170f945ee376a07f0b5197b9060bbbdcfb4'
+    user = BINTRAY_USER
+    key = BINTRAY_KEY
     publications = ['MyPublication']
     publish = true
     pkg {
@@ -40,10 +40,10 @@ bintray {
         licenses = ['Apache-2.0']
 
         version {
-            name = '1.0.4' //Bintray logical version name
+            name = update_version //Bintray logical version name
             desc = ''
             released  = new Date()
-            vcsTag = '1.0.4'
+            vcsTag = update_version
         }
     }
 }

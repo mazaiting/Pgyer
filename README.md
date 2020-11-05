@@ -35,6 +35,10 @@ UpdateManager.getInstance()
 
 ### 版本
 
+- v1.0.3
+1. 将 assets/pgyer.json 复制到 files/文件夹
+2. 如果pgyer.json 中的版本大于最大版本, 则进行更新
+
 - v1.0.2
 1. 修复首次安装提示更新问题
 2. 增加混淆配置

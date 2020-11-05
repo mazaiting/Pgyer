@@ -56,7 +56,7 @@ afterEvaluate {
                 from components.release
                 groupId 'com.mazaiting.pgyer'
                 artifactId 'update'
-                version '1.0.3'
+                version update_version
             }
         }
     }

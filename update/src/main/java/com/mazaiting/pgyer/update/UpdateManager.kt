@@ -110,11 +110,12 @@ class UpdateManager private constructor() {
                     // 构建版本
                     val newBuildBuildVersion = data.buildBuildVersion
                     // 为 0 时直接保存
-                    if (newBuildBuildVersion > 1 && newBuildBuildVersion > buildBuildVersion) {
+                    if (newBuildBuildVersion > 1 && newBuildBuildVersion != buildBuildVersion) {
                         block?.let { block(data) }
-                    } else if (buildBuildVersion > newBuildBuildVersion) {
-                        writeBuildVersion(context, data.buildBuildVersion)
                     }
+//                    else if (buildBuildVersion > newBuildBuildVersion) {
+//                        writeBuildVersion(context, data.buildBuildVersion)
+//                    }
                 } else {
                     context.toast(it.getFailedMessage())
                 }
@@ -133,7 +134,7 @@ class UpdateManager private constructor() {
     private fun copyAssetsToFile(context: Context): Boolean {
         // 创建文件
         val file = File(context.filesDir.absolutePath, FILE_NAME)
-        // 如果文件存在, 则直接返回
+        // 如果文件存在, 则删除
         if (file.exists()) {
             return true
         }
@@ -178,6 +179,27 @@ class UpdateManager private constructor() {
         }
     }
 
+    /**
+     * 读取蒲公英配置内容
+     * @param context 上下文
+     */
+    private fun getBuildVersionByAssets(context: Context): Int {
+        try {
+            // 获取文件流
+            val inputStream = context.assets.open(FILE_NAME)
+            // 读取内容
+            val pgyerContent = String(inputStream.readBytes())
+            // 解析
+            val jsonObject = JSONObject(pgyerContent)
+            // 获取版本
+            val buildVersion = jsonObject.getInt("build_version")
+            debug("buildVersion: $buildVersion")
+            return buildVersion
+        } catch (e: IOException) {
+            debug("解析异常")
+        }
+        return 1
+    }
 
     /**
      * 读取蒲公英配置内容

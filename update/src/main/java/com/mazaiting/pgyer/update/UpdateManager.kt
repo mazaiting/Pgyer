@@ -94,37 +94,37 @@ class UpdateManager private constructor() {
             context.toast("蒲公英 API KEY 为空! 请设置")
             return
         }
-        // 拷贝文件
-        val isCopyAssetsToFile = copyAssetsToFile(context)
-        // 判断是否复制成功
-        if (isCopyAssetsToFile) {
-            // 获取蒲公英版本
-            val buildBuildVersion = getBuildVersion(context)
-            // 获取是否更新
-            response({ RxUtil.checkAsync(apiKey, appKey, buildVersion, buildBuildVersion) }, {
-                debug(it.message)
-                // 判断是否成功
-                if (it.isSuccess()) {
-                    debug(it.data)
-                    val data = it.data
-                    // 构建版本
-                    val newBuildBuildVersion = data.buildBuildVersion
-                    // 为 0 时直接保存
-                    if (newBuildBuildVersion > 1 && newBuildBuildVersion != buildBuildVersion) {
-                        block?.let { block(data) }
-                    }
+//        // 拷贝文件
+//        val isCopyAssetsToFile = copyAssetsToFile(context)
+//        // 判断是否复制成功
+//        if (isCopyAssetsToFile) {
+        // 获取蒲公英版本
+        val buildBuildVersion = getBuildVersionByAssets(context)
+        // 获取是否更新
+        response({ RxUtil.checkAsync(apiKey, appKey, buildVersion, buildBuildVersion) }, {
+            debug(it.message)
+            // 判断是否成功
+            if (it.isSuccess()) {
+                debug(it.data)
+                val data = it.data
+                // 构建版本
+                val newBuildBuildVersion = data.buildBuildVersion
+                // 为 0 时直接保存
+                if (newBuildBuildVersion > 1 && newBuildBuildVersion != buildBuildVersion) {
+                    block?.let { block(data) }
+                }
 //                    else if (buildBuildVersion > newBuildBuildVersion) {
 //                        writeBuildVersion(context, data.buildBuildVersion)
 //                    }
-                } else {
-                    context.toast(it.getFailedMessage())
-                }
-            }, {
-                debug(it)
-            })
-        } else {
-            context.toast("复制文件失败")
-        }
+            } else {
+                context.toast(it.getFailedMessage())
+            }
+        }, {
+            debug(it)
+        })
+//        } else {
+//            context.toast("复制文件失败")
+//        }
     }
 
     /**
